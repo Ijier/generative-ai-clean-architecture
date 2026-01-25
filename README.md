@@ -34,10 +34,9 @@
     - FastAPI
     - Postgres
 
-# 🤖 AI Model Abstraction
-
-# 🛡️ Grounding & QA Pipeline
+# 🤖 AI Model Abstraction / 🛡️ Grounding & QA Pipeline
 Gemini Grounding を活用した事実基づく生成に加え、BigQuery ML を用いた事後検証ロジックをインターフェース化。生成AI特有の「ハルシネーション」をシステム構造的に抑制します。
+
 
 # ⚙️ Flexible DI Container
 punq などのDIコンテナ（または自作コンテナ）を用い、Local/Dev/Prod環境ごとに、実際のAI APIとMockを容易に切り替えられる構造を実現しています。
@@ -67,3 +66,35 @@ src/
         ├── orm_models
         └── storage
 ```
+
+
+# 🚀🚀🚀 Future Roadmap: Feedback Loop & Performance Prediction
+
+生成したアセットのパフォーマンスデータを蓄積し、次回の生成プロセスにフィードバックする学習サイクルの構築を予定しています。
+
+
+## 📊 Performance-Based Learning Pipeline
+アセット公開後の「評価指標（エンゲージメント率等）」をデータウェアハウスへフィードバックし、高精度なアセット生成を実現するための予測モデルを構築します。
+
+* **Data Engineering (Batch/Stream):**
+    * 配信済みデータのパフォーマンス推移を収集し、BigQuery へ統合。
+    * 大規模データの加工・前処理には **Apache Beam (Dataflow)** の導入を検討中。
+* **Predictive Modeling (BigQuery ML):**
+    * 過去の「ヒットアセット」の傾向を学習。
+    * **Models:** `LOGISTIC_REGRESSION` または `BOOSTED_TREE_CLASSIFIER` を採用予定。
+    * **Features:** 配信カテゴリ、メタデータの構成、配信タイミング、コンテンツの長さ等の特徴量から「ターゲット指標への到達確率」を予測します。
+* **Optimization:**
+    * 予測スコアが高いデータソースのみを優先的に抽出（Priority Queue化）し、パイプライン全体の ROI を最大化します。
+
+
+## 📈 Data Visualization & Monitoring (Business Intelligence)
+パイプラインの稼働状況および、生成したアセットのパフォーマンスを可視化し、継続的な改善サイクル（PDCA）を回すための基盤を構築します。
+
+* **BI Tool Integration:**
+    * **Looker Studio** を活用したリアルタイムダッシュボードの構築。
+* **Key Metrics (KPIs):**
+    * **System Health:** 各生成フェーズ（LLM/TTS/Image）の成功率、処理時間、APIコストの推移。
+    * **Asset Performance:** 予測スコアと実際のエンゲージメント指標（KPI）の相関分析。
+    * **Trend Analysis:** 特定のカテゴリや時間帯における「ヒット確率」の推移。
+* **Objective:**
+    * 数値に基づいたプロンプトの微調整や、特徴量の選定、リソース配分の最適化を迅速に行える環境を実現します。
